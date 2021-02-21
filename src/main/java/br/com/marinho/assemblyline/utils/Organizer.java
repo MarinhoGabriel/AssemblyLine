@@ -50,7 +50,7 @@ public class Organizer {
      * @param value Value used in the filling process.
      * @return String containing the filled, if necessary, value.
      */
-    private static String fillMissingPlace(double value) {
+    private String fillMissingPlace(double value) {
         return (value < 10) ? "0" + (int) value : String.valueOf((int) value);
     }
 
@@ -63,7 +63,7 @@ public class Organizer {
      * @param targetSting     String builder that is receiving the values.
      * @param stringsToAppend Strings to be appended.
      */
-    private static void appendStrings(StringBuilder targetSting, String... stringsToAppend) {
+    private void appendStrings(StringBuilder targetSting, String... stringsToAppend) {
         for (int i = 0; i < stringsToAppend.length; i++) {
             targetSting.append(stringsToAppend[i]);
         }
@@ -79,7 +79,7 @@ public class Organizer {
      * @param activities Activities coming from the file.
      * @return Organized assembly lines.
      */
-    public static String organize(Map<String, Integer> activities) {
+    public String organize(Map<String, Integer> activities) {
         StringBuilder line = new StringBuilder();
         double time = INITIAL_TIME;
         boolean hadLunch = false;
@@ -89,7 +89,7 @@ public class Organizer {
         line.append(String.format(ASSEMBLY_LINE_TITLE, assemblyLine++));
 
         for (Map.Entry<String, Integer> entry : activities.entrySet()) {
-            if (!hadLunch && time + (entry.getValue() / HOUR_MULTIPLIER) >= 12.) {
+            if (!hadLunch && time + (entry.getValue() / HOUR_MULTIPLIER) > 12.) {
                 line.append(LUNCH_TIME);
                 hadLunch = true;
                 time = AFTER_LUNCH_TIME;
@@ -97,18 +97,23 @@ public class Organizer {
             }
 
             if (time + (entry.getValue() / HOUR_MULTIPLIER) >= 17.) {
-                String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
-                appendStrings(line, fillMissingPlace(time), DOUBLE_COLON, minutes, GYM_TIME, LINE_BREAK);
+                if (time < 16.) {
+                    this.appendStrings(line, GYM_DEFAULT_TIME, GYM_TIME, LINE_BREAK);
+                } else {
+                    String minutes = this.fillMissingPlace(decimalTime).replace(POINT, "");
+                    this.appendStrings(line, this.fillMissingPlace((int) time), DOUBLE_COLON, minutes, GYM_TIME,
+                            LINE_BREAK);
+                }
+
                 time = INITIAL_TIME;
                 decimalTime = (time - (int) time) * HOUR_MULTIPLIER;
                 hadLunch = false;
                 line.append(String.format(ASSEMBLY_LINE_TITLE, assemblyLine++));
-                continue;
             }
 
-            String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
-            appendStrings(line, fillMissingPlace((int) time), DOUBLE_COLON, minutes, WHITESPACE, entry.getKey(),
-                    WHITESPACE);
+            String minutes = this.fillMissingPlace(decimalTime).replace(POINT, "");
+            this.appendStrings(line, this.fillMissingPlace((int) time), DOUBLE_COLON, minutes, WHITESPACE,
+                    entry.getKey(), WHITESPACE);
             if (entry.getValue() != 5) {
                 line.append(entry.getValue()).append(MINUTE_SUFFIX);
             }
@@ -117,12 +122,12 @@ public class Organizer {
             decimalTime = (time - (int) time) * HOUR_MULTIPLIER;
         }
 
-        if (!line.toString().endsWith(GYM_TIME)) {
+        if (!line.toString().endsWith(GYM_TIME) && hadLunch) {
             if (time < 16.) {
                 line.append(GYM_DEFAULT_TIME).append(GYM_TIME);
             } else {
-                String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
-                appendStrings(line, fillMissingPlace((int) time), DOUBLE_COLON, minutes, GYM_TIME);
+                String minutes = this.fillMissingPlace(decimalTime).replace(POINT, "");
+                this.appendStrings(line, this.fillMissingPlace((int) time), DOUBLE_COLON, minutes, GYM_TIME);
             }
         }
 

@@ -1,6 +1,6 @@
-package br.com.marinho.assemblyline.util;
+package br.com.marinho.assemblyline.utils;
 
-import br.com.marinho.assemblyline.utils.FileLineUtils;
+import br.com.marinho.assemblyline.testUtilities.TestUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class FileLineUtilsTest {
     public void should_CallSystemExitOne_When_FileIsCorrupted() throws IOException {
         this.exitRule.expectSystemExitWithStatus(1);
 
-        File file = new File(SRC_TEST_RESOURCES + getMethodName() + TXT_EXTENSION);
+        File file = new File(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION);
         RandomAccessFile raf = new RandomAccessFile(file.getAbsolutePath(), "rw");
         final FileLock[] fileLock = {raf.getChannel().tryLock()};
         this.exitRule.checkAssertionAfterwards(() -> fileLock[0].release());
@@ -68,7 +68,7 @@ public class FileLineUtilsTest {
     @Test
     public void should_CallSystemExitOne_When_ThereIsALineWithNoTime() {
         this.exitRule.expectSystemExitWithStatus(1);
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         FileLineUtils.getAssemblyMap(file);
     }
 
@@ -81,7 +81,7 @@ public class FileLineUtilsTest {
     @Test
     public void should_CallSystemExitOne_When_MaintenanceLineDoesNotHaveSeparator() {
         this.exitRule.expectSystemExitWithStatus(1);
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         FileLineUtils.getAssemblyMap(file);
     }
 
@@ -93,7 +93,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLine_When_MaintenanceTextIsUpperCase() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -113,7 +113,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLines_When_ThereAreJustMaintenance() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -133,7 +133,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLines_When_ThereIsNoMaintenance() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -155,7 +155,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLines_When_ThereIsASeparatorBetweenTheNameAndTime() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -177,7 +177,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLines_When_ThereIsNoSpace() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -198,7 +198,7 @@ public class FileLineUtilsTest {
     @Test
     public void should_CallSystemExitOne_When_ThereIsANumberInAProductionStepTitle() {
         this.exitRule.expectSystemExitWithStatus(1);
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         FileLineUtils.getAssemblyMap(file);
     }
 
@@ -209,7 +209,7 @@ public class FileLineUtilsTest {
      */
     @Test
     public void should_ConvertLines_When_SomeTimeIsOverSixtyMinutes() {
-        File file = Paths.get(SRC_TEST_RESOURCES + this.getMethodName() + TXT_EXTENSION).toFile();
+        File file = Paths.get(SRC_TEST_RESOURCES + TestUtils.getMethodName() + TXT_EXTENSION).toFile();
         Map<String, Integer> assemblyMap = FileLineUtils.getAssemblyMap(file);
 
         Assert.assertEquals(8, assemblyMap.size());
@@ -221,18 +221,5 @@ public class FileLineUtilsTest {
         Assert.assertEquals(Integer.valueOf(120), assemblyMap.get("Axis calibration"));
         Assert.assertEquals(Integer.valueOf(45), assemblyMap.get("Steel bearing assembly"));
         Assert.assertEquals(Integer.valueOf(5), assemblyMap.get("Assembly line cooling"));
-    }
-
-    /**
-     * Each test has a test file with the same name as the method. The belo method gets the method name from the
-     * stacktrace to get the right file.
-     *
-     * @return The name of the executing method.
-     */
-    private String getMethodName() {
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-        String methodName = stack[2].toString().substring(0, stack[2].toString().indexOf("("));
-
-        return methodName.substring(methodName.lastIndexOf(".") + 1);
     }
 }
