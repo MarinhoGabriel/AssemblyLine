@@ -1,0 +1,8 @@
+Cuttingofsteelsheets60min
+Austenpera(Heattreatment)30min
+Temperingsub-zero(Heattreatment)45min
+Safetysensorassembly60min
+Pieceswashing45min
+Axiscalibration30min
+Steelbearingassembly45min
+Assemblylinecooling-Maintenance
