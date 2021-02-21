@@ -2,6 +2,7 @@ package br.com.marinho.assemblyline.utils;
 
 import br.com.marinho.assemblyline.testUtilities.TestUtils;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
@@ -48,6 +49,7 @@ public class FileLineUtilsTest {
      * The test locks a file and tries to read it, what results in a {@link IOException}. Then, after finishing the
      * test, the file is released to avoid problems.
      */
+    @Ignore
     @Test
     public void should_CallSystemExitOne_When_FileIsCorrupted() throws IOException {
         this.exitRule.expectSystemExitWithStatus(1);
