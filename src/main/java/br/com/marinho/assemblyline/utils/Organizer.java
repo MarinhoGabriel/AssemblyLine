@@ -45,7 +45,7 @@ public class Organizer {
 
     /**
      * If the value, represented as {@code value} is lesser than 10, we need to add a 0 before it so the time can be in
-     * 0X:XX format.
+     * 0X:XX format. This method is the responsible for this filling.
      *
      * @param value Value used in the filling process.
      * @return String containing the filled, if necessary, value.
@@ -97,15 +97,16 @@ public class Organizer {
             }
 
             if (time + (entry.getValue() / HOUR_MULTIPLIER) >= 17.) {
-                String minutes = fillMissingPlace(decimalTime).replace(POINT, "").substring(0, 2);
+                String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
                 appendStrings(line, fillMissingPlace(time), DOUBLE_COLON, minutes, GYM_TIME, LINE_BREAK);
                 time = INITIAL_TIME;
+                decimalTime = (time - (int) time) * HOUR_MULTIPLIER;
                 hadLunch = false;
                 line.append(String.format(ASSEMBLY_LINE_TITLE, assemblyLine++));
                 continue;
             }
 
-            String minutes = fillMissingPlace(decimalTime).replace(POINT, "").substring(0, 2);
+            String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
             appendStrings(line, fillMissingPlace((int) time), DOUBLE_COLON, minutes, WHITESPACE, entry.getKey(),
                     WHITESPACE);
             if (entry.getValue() != 5) {
@@ -120,7 +121,7 @@ public class Organizer {
             if (time < 16.) {
                 line.append(GYM_DEFAULT_TIME).append(GYM_TIME);
             } else {
-                String minutes = fillMissingPlace(decimalTime).replace(POINT, "").substring(0, 2);
+                String minutes = fillMissingPlace(decimalTime).replace(POINT, "");
                 appendStrings(line, fillMissingPlace((int) time), DOUBLE_COLON, minutes, GYM_TIME);
             }
         }
