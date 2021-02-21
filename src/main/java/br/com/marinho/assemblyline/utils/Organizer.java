@@ -119,7 +119,7 @@ public class Organizer {
             }
             line.append(LINE_BREAK);
             time += entry.getValue() / HOUR_MULTIPLIER;
-            decimalTime = (time - (int) time) * HOUR_MULTIPLIER;
+            decimalTime = Math.round((time - (int) time) * HOUR_MULTIPLIER);
         }
 
         if (!line.toString().endsWith(GYM_TIME) && hadLunch) {
