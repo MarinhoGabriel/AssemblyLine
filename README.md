@@ -1,5 +1,9 @@
 # AssemblyLine
-A sorting software used to organize an assembly line.
+A sorting software used to organize a number of processes into assembly lines with lunch and gym times in some fixed periods.
+
+| Build |
+|-------|
+[![Build Status](https://travis-ci.com/MarinhoGabriel/AssemblyLine.svg?branch=master)](https://travis-ci.com/MarinhoGabriel/AssemblyLine) [![Coverage Status](https://coveralls.io/repos/github/MarinhoGabriel/AssemblyLine/badge.svg?branch=master)](https://coveralls.io/github/MarinhoGabriel/AssemblyLine?branch=master) [![codecov](https://codecov.io/gh/MarinhoGabriel/AssemblyLine/branch/master/graph/badge.svg?token=1KKTR3B0QW)](https://codecov.io/gh/MarinhoGabriel/AssemblyLine)
 
 An assembly line has multiple steps and the goal of this program is to organize these steps into assembly lines considering the lunch time, at noon, and the gym time, in a period between 16h and 17h.
 The input of the program is a text file, calles "input.txt" and the first step of the program is to separate the productuon lines into a `Map<String, Integer>` with all production steps with their duration (in some cases, we can have the string `maintenance`, indicating that the step has a 5min duration). 
